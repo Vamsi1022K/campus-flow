@@ -33,12 +33,14 @@ const venueRoutes = require('./routes/venues');
 const bookingRoutes = require('./routes/bookings');
 const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/users');
+const aiRoutes = require('./routes/ai');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/venues', venueRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Apply rate limit specifically to login
 app.use('/api/auth/login', authLimiter);

@@ -8,6 +8,7 @@ import BookVenue from './pages/BookVenue';
 import AdminPanel from './pages/AdminPanel';
 import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
+import AIAssistant from './components/AIAssistant';
 
 // ProtectedRoute: blocks access to pages that require login
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -40,6 +41,7 @@ function App() {
             <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
+          <AIAssistant />
         </Router>
       </AuthProvider>
     </ThemeProvider>
