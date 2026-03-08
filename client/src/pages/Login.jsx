@@ -8,6 +8,7 @@ const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(true); // default ON
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -16,7 +17,7 @@ const Login = () => {
         setError('');
         setLoading(true);
         try {
-            await login(username, password);
+            await login(username, password, rememberMe);
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please try again.');
@@ -29,7 +30,7 @@ const Login = () => {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
             <div className="w-full max-w-md">
 
-                {/* Header Card */}
+                {/* Header */}
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600 shadow-lg mb-4">
                         <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,6 +79,21 @@ const Login = () => {
                                 required
                             />
                         </div>
+
+                        {/* Remember Me */}
+                        <div className="flex items-center gap-2">
+                            <input
+                                id="remember-me"
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                                className="w-4 h-4 text-blue-600 border-slate-300 rounded cursor-pointer"
+                            />
+                            <label htmlFor="remember-me" className="text-sm text-slate-600 cursor-pointer select-none">
+                                Remember me for 30 days
+                            </label>
+                        </div>
+
                         <button
                             id="sign-in-btn"
                             type="submit"

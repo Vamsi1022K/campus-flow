@@ -34,11 +34,11 @@ exports.register = async (req, res) => {
             }
         };
 
-        // Sign token
+        // Sign token - valid for 30 days
         jwt.sign(
             payload,
             process.env.JWT_SECRET || 'secretkey',
-            { expiresIn: '5h' },
+            { expiresIn: '30d' },
             (err, token) => {
                 if (err) throw err;
                 res.json({ token, role: user.role });
@@ -75,11 +75,11 @@ exports.login = async (req, res) => {
             }
         };
 
-        // Sign token
+        // Sign token - valid for 30 days
         jwt.sign(
             payload,
             process.env.JWT_SECRET || 'secretkey',
-            { expiresIn: '5h' },
+            { expiresIn: '30d' },
             (err, token) => {
                 if (err) throw err;
                 res.json({ token, role: user.role, username: user.username });
