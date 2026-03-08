@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import BookVenue from './pages/BookVenue';
 import AdminPanel from './pages/AdminPanel';
 import ProfilePage from './pages/ProfilePage';
+import LandingPage from './pages/LandingPage';
 
 // ProtectedRoute: blocks access to pages that require login
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -31,12 +32,13 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/book/:id" element={<ProtectedRoute allowedRoles={['faculty', 'cr', 'event_organizer']}><BookVenue /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute allowedRoles={['sysadmin']}><AdminPanel /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-            <Route path="*" element={<Navigate to="/dashboard" />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Router>
       </AuthProvider>
