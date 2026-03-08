@@ -16,6 +16,10 @@ const venueSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    imageUrl: {
+        type: String,
+        default: ''   // optional photo URL for venue card
+    },
     admin_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

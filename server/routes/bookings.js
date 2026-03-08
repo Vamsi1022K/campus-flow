@@ -18,4 +18,24 @@ router.get('/', auth, bookingController.getBookings);
 // @access  Private (Admins)
 router.put('/:id/status', auth, bookingController.updateBookingStatus);
 
+// @route   PATCH api/bookings/:id/cancel
+// @desc    Cancel a pending booking (by the booking owner)
+// @access  Private
+router.patch('/:id/cancel', auth, async (req, res) => {
+    const Booking = require('../models/Booking');
+    try {
+        const booking = await Booking.findById(req.params.id);
+        if (!booking) return res.status(404).json({ message: 'Booking not found' });
+        if (booking.user.toString() !== req.user.id)
+            return res.status(403).json({ message: 'Not authorized' });
+        if (booking.status !== 'pending')
+            return res.status(400).json({ message: 'Only pending bookings can be cancelled' });
+        booking.status = 'cancelled';
+        await booking.save();
+        res.json(booking);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 module.exports = router;
