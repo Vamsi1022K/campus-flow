@@ -122,7 +122,7 @@ const AdminPanel = () => {
 
                 {/* Add Venue Form */}
                 <div className="glass-card p-6 mb-8 animate-fade-in-up">
-                    <h2 className="text-lg font-bold text-white mb-5">➕ Add New Venue</h2>
+                    <h2 className="text-lg font-bold text-theme mb-5">➕ Add New Venue</h2>
                     <form onSubmit={addVenue} className="flex flex-wrap gap-3 items-end">
                         <div className="flex-1 min-w-40">
                             <label className="block text-xs text-gray-400 mb-1">Venue Name</label>
@@ -154,7 +154,7 @@ const AdminPanel = () => {
 
                 {/* Venues Table */}
                 <div className="glass-card p-6 mb-8 animate-fade-in-up">
-                    <h2 className="text-lg font-bold text-white mb-4">🏫 Venues ({venues.length})</h2>
+                    <h2 className="text-lg font-bold text-theme mb-4">🏫 Venues ({venues.length})</h2>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm table-dark">
                             <thead>
@@ -168,7 +168,7 @@ const AdminPanel = () => {
                             <tbody className="divide-y" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
                                 {venues.map(v => (
                                     <tr key={v._id}>
-                                        <td className="py-3 text-white font-medium">{v.name}</td>
+                                        <td className="py-3 text-theme font-medium">{v.name}</td>
                                         <td className="py-3">
                                             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${v.type === 'classroom' ? 'badge-classroom' : 'badge-seminar'}`}>
                                                 {v.type === 'classroom' ? 'Classroom' : 'Seminar Hall'}
@@ -191,7 +191,7 @@ const AdminPanel = () => {
 
                 {/* Users Table */}
                 <div className="glass-card p-6 animate-fade-in-up">
-                    <h2 className="text-lg font-bold text-white mb-4">👥 System Users ({users.length})</h2>
+                    <h2 className="text-lg font-bold text-theme mb-4">👥 System Users ({users.length})</h2>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm table-dark">
                             <thead>
@@ -204,7 +204,7 @@ const AdminPanel = () => {
                             <tbody className="divide-y" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
                                 {users.map(u => (
                                     <tr key={u._id}>
-                                        <td className="py-3 text-white font-medium">{u.username}</td>
+                                        <td className="py-3 text-theme font-medium">{u.username}</td>
                                         <td className="py-3">
                                             <span className="text-xs px-2 py-0.5 rounded-full font-medium"
                                                 style={{

@@ -16,6 +16,23 @@ const AIAssistant = () => {
     const [apiKey, setApiKey] = useState(localStorage.getItem('gemini_api_key') || '');
 
     const messagesEndRef = useRef(null);
+    const assistantRef = useRef(null);
+
+    // Close on outside click
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (assistantRef.current && !assistantRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
 
     // Auto-scroll to bottom
     useEffect(() => {
@@ -60,12 +77,12 @@ const AIAssistant = () => {
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div ref={assistantRef} className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
 
             {/* Chat Window */}
             {isOpen && (
-                <div className="glass-card mb-4 w-80 sm:w-96 h-[500px] max-h-[70vh] flex flex-col overflow-hidden animate-fade-in-up"
-                    style={{ border: '1px solid rgba(224,32,32,0.3)', boxShadow: '0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(224,32,32,0.1)' }}>
+                <div className="mb-4 w-80 sm:w-96 h-[500px] max-h-[70vh] flex flex-col overflow-hidden animate-fade-in-up rounded-2xl"
+                    style={{ background: '#0d0d0d', border: '1px solid rgba(224,32,32,0.3)', boxShadow: '0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(224,32,32,0.1)' }}>
 
                     {/* Header */}
                     <div className="p-4 flex items-center justify-between"
@@ -106,12 +123,12 @@ const AIAssistant = () => {
                     ) : (
                         <>
                             {/* Messages Area */}
-                            <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-app scrollbar-hide" style={{ background: 'rgba(13,13,13,0.95)' }}>
+                            <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-[#0d0d0d] scrollbar-hide">
                                 {messages.map((m, i) => (
                                     <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                         <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${m.role === 'user'
-                                                ? 'bg-blue-600 outline-none text-white rounded-br-none'
-                                                : 'text-gray-200 rounded-bl-none'
+                                            ? 'bg-blue-600 outline-none text-white rounded-br-none'
+                                            : 'text-gray-200 rounded-bl-none'
                                             }`}
                                             style={m.role === 'ai' ? { background: 'rgba(224,32,32,0.15)', border: '1px solid rgba(224,32,32,0.3)' } : {}}>
                                             {m.text}
@@ -132,7 +149,7 @@ const AIAssistant = () => {
                             </div>
 
                             {/* Input Area */}
-                            <div className="p-3 bg-app" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                            <div className="p-3 bg-[#111]" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                                 <form onSubmit={handleSend} className="relative flex items-center">
                                     <input
                                         type="text"

@@ -56,7 +56,7 @@ const LandingPage = () => {
                         style={{ background: 'rgba(224,32,32,0.15)', color: '#f87171', border: '1px solid rgba(224,32,32,0.3)' }}>
                         🎓 Built for Campus Use
                     </div>
-                    <h1 className="text-5xl sm:text-7xl font-black text-white leading-tight mb-6">
+                    <h1 className="text-5xl sm:text-7xl font-black text-theme leading-tight mb-6">
                         Smart <span className="gradient-text">Venue Booking</span><br />for Your Campus
                     </h1>
                     <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -90,7 +90,7 @@ const LandingPage = () => {
             {/* ── Features ── */}
             <section id="features" className="px-6 py-20 max-w-6xl mx-auto">
                 <div className="text-center mb-14">
-                    <h2 className="text-4xl font-black text-white mb-3">Everything You Need</h2>
+                    <h2 className="text-4xl font-black text-theme mb-3">Everything You Need</h2>
                     <p className="text-gray-400">Powerful features built for modern campus management</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -98,7 +98,7 @@ const LandingPage = () => {
                         <div key={f.title} className="glass-card p-6 bg-card-hover animate-fade-in-up"
                             style={{ animationDelay: `${i * 0.08}s` }}>
                             <div className="text-3xl mb-4">{f.icon}</div>
-                            <h3 className="text-white font-bold text-lg mb-2">{f.title}</h3>
+                            <h3 className="text-theme font-bold text-lg mb-2">{f.title}</h3>
                             <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
                         </div>
                     ))}
@@ -108,7 +108,7 @@ const LandingPage = () => {
             {/* ── How it works ── */}
             <section className="px-6 py-20 text-center"
                 style={{ background: 'linear-gradient(135deg,rgba(224,32,32,0.06),rgba(26,110,245,0.04))' }}>
-                <h2 className="text-4xl font-black text-white mb-14">How It Works</h2>
+                <h2 className="text-4xl font-black text-theme mb-14">How It Works</h2>
                 <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
                     {[
                         { step: '01', title: 'Sign In', desc: 'Login with your campus credentials — your role is automatically detected.' },
@@ -117,7 +117,7 @@ const LandingPage = () => {
                     ].map(s => (
                         <div key={s.step} className="glass-card p-6">
                             <div className="text-5xl font-black mb-3 gradient-text">{s.step}</div>
-                            <h3 className="text-white font-bold text-lg mb-2">{s.title}</h3>
+                            <h3 className="text-theme font-bold text-lg mb-2">{s.title}</h3>
                             <p className="text-gray-400 text-sm">{s.desc}</p>
                         </div>
                     ))}
@@ -126,7 +126,7 @@ const LandingPage = () => {
 
             {/* ── CTA ── */}
             <section className="px-6 py-24 text-center">
-                <h2 className="text-4xl font-black text-white mb-4">Ready to Get Started?</h2>
+                <h2 className="text-4xl font-black text-theme mb-4">Ready to Get Started?</h2>
                 <p className="text-gray-400 mb-8">Join your campus on Campus Flow today.</p>
                 <button onClick={() => navigate('/login')} className="btn-primary text-lg px-10 py-4">
                     🚀 Sign In to Campus Flow

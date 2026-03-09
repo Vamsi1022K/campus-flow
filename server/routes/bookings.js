@@ -8,6 +8,11 @@ const auth = require('../middleware/auth');
 // @access  Private
 router.post('/', auth, bookingController.createBooking);
 
+// @route   GET api/bookings/approved
+// @desc    Get all approved bookings for the calendar
+// @access  Private
+router.get('/approved', auth, bookingController.getApprovedBookings);
+
 // @route   GET api/bookings
 // @desc    Get bookings
 // @access  Private
@@ -26,7 +31,7 @@ router.patch('/:id/cancel', auth, async (req, res) => {
     try {
         const booking = await Booking.findById(req.params.id);
         if (!booking) return res.status(404).json({ message: 'Booking not found' });
-        if (booking.user.toString() !== req.user.id)
+        if (booking.user_id.toString() !== req.user.id)
             return res.status(403).json({ message: 'Not authorized' });
         if (booking.status !== 'pending')
             return res.status(400).json({ message: 'Only pending bookings can be cancelled' });

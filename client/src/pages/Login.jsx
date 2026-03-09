@@ -53,7 +53,7 @@ const Login = () => {
 
                 {/* Card */}
                 <div className="glass-card p-8 shadow-2xl">
-                    <h2 className="text-xl font-bold text-white mb-6">Sign in to your account</h2>
+                    <h2 className="text-xl font-bold text-theme mb-6">Sign in to your account</h2>
 
                     {error && (
                         <div className="flex items-center gap-2 rounded-xl mb-5 text-sm p-3"

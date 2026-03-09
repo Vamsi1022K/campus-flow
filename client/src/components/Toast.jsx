@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { toast, Toaster } from 'react-hot-toast';
 
 /* ─────────────────────────────────────────────
    useToast hook  –  call in any component
@@ -6,54 +6,45 @@ import { useState, useEffect } from 'react';
    showToast('Booking submitted!', 'success');
    ───────────────────────────────────────────── */
 export const useToast = () => {
-    const [toast, setToast] = useState(null);
-
     const showToast = (message, type = 'success') => {
-        setToast({ message, type, id: Date.now() });
+        const style = {
+            background: 'linear-gradient(135deg, rgba(20,20,20,0.95), rgba(0,0,0,0.95))',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.1)',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+            fontSize: '14px',
+            padding: '12px 20px',
+        };
+
+        if (type === 'success') {
+            toast.success(message, {
+                style,
+                iconTheme: { primary: '#4ade80', secondary: '#0d0d0d' }
+            });
+        } else if (type === 'error') {
+            toast.error(message, {
+                style: { ...style, border: '1px solid rgba(224,32,32,0.3)' },
+                iconTheme: { primary: '#f87171', secondary: '#0d0d0d' }
+            });
+        } else {
+            toast(message, {
+                icon: 'ℹ️',
+                style,
+            });
+        }
     };
 
-    const closeToast = () => setToast(null);
+    const closeToast = () => toast.dismiss();
 
-    return { toast, showToast, closeToast };
+    return { toast: null, showToast, closeToast }; // Return null to satisfy legacy usage
 };
 
 /* ─────────────────────────────────────────────
-   Toast UI component
+   Toast UI component wrapper around Toaster
    <Toast toast={toast} onClose={closeToast} />
    ───────────────────────────────────────────── */
-const Toast = ({ toast, onClose }) => {
-    useEffect(() => {
-        if (!toast) return;
-        const timer = setTimeout(onClose, 3500);
-        return () => clearTimeout(timer);
-    }, [toast, onClose]);
-
-    if (!toast) return null;
-
-    const styles = {
-        success: { bar: 'bg-green-500', icon: '✓', bg: 'bg-white border-green-200 text-green-800' },
-        error: { bar: 'bg-red-500', icon: '✕', bg: 'bg-white border-red-200 text-red-800' },
-        info: { bar: 'bg-blue-500', icon: 'ℹ', bg: 'bg-white border-blue-200 text-blue-800' },
-    };
-
-    const s = styles[toast.type] || styles.info;
-
-    return (
-        <div className="fixed bottom-6 right-6 z-50 animate-bounce-once">
-            <div className={`flex items-center gap-3 border shadow-lg rounded-xl px-4 py-3 min-w-64 max-w-sm ${s.bg}`}>
-                {/* Coloured accent bar */}
-                <div className={`w-1 self-stretch rounded-full ${s.bar}`} />
-                {/* Icon */}
-                <span className={`text-sm font-bold w-5 h-5 rounded-full flex items-center justify-center ${s.bar} text-white shrink-0`}>
-                    {s.icon}
-                </span>
-                {/* Message */}
-                <p className="text-sm font-medium flex-1">{toast.message}</p>
-                {/* Close */}
-                <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-lg leading-none shrink-0">×</button>
-            </div>
-        </div>
-    );
+const Toast = () => {
+    return <Toaster position="bottom-right" reverseOrder={false} toastOptions={{ duration: 4000 }} />;
 };
 
 export default Toast;

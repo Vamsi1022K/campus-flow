@@ -92,7 +92,7 @@ const ProfilePage = () => {
                     className="input-dark pr-12"
                     placeholder={placeholder} required />
                 <button type="button" onClick={() => setShow(!show)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors text-sm">
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-theme transition-colors text-sm">
                     {show ? '🙈' : '👁️'}
                 </button>
             </div>
@@ -139,7 +139,7 @@ const ProfilePage = () => {
                         </div>
                         <div className="flex items-end justify-between">
                             <div>
-                                <h1 className="text-2xl font-black text-white">{user?.username}</h1>
+                                <h1 className="text-2xl font-black text-theme">{user?.username}</h1>
                                 <span className="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-semibold"
                                     style={{ background: ri.bg, color: ri.color }}>
                                     {ri.label}
@@ -171,22 +171,22 @@ const ProfilePage = () => {
                 {tab === 'account' && (
                     <div className="space-y-4 animate-fade-in-up">
                         <div className="glass-card p-6">
-                            <h2 className="text-base font-bold text-white mb-4">Account Information</h2>
+                            <h2 className="text-base font-bold text-theme mb-4">Account Information</h2>
                             <div className="space-y-3">
                                 {[['Username', user?.username, '👤'], ['Role', ri.label, ri.icon], ['Session', 'Active (30-day JWT)', '🔑']].map(([k, v, ico]) => (
                                     <div key={k} className="flex items-center justify-between py-3 px-1"
                                         style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                                         <span className="text-gray-400 text-sm">{ico} {k}</span>
-                                        <span className="text-white text-sm font-medium">{v}</span>
+                                        <span className="text-theme text-sm font-medium">{v}</span>
                                     </div>
                                 ))}
                             </div>
                         </div>
                         <div className="glass-card p-6">
-                            <h2 className="text-base font-bold text-white mb-4">⚙️ Preferences</h2>
+                            <h2 className="text-base font-bold text-theme mb-4">⚙️ Preferences</h2>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-white font-medium">Dark Mode</p>
+                                    <p className="text-theme font-medium">Dark Mode</p>
                                     <p className="text-gray-500 text-sm">Toggle between dark and light theme</p>
                                 </div>
                                 <button onClick={toggle}
@@ -207,14 +207,14 @@ const ProfilePage = () => {
                         <div className="grid grid-cols-4 gap-3 mb-5">
                             {tabStats.map(s => (
                                 <div key={s.label} className="glass-card p-3 text-center">
-                                    <p className="text-2xl font-black text-white">{s.value}</p>
+                                    <p className="text-2xl font-black text-theme">{s.value}</p>
                                     <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
                                 </div>
                             ))}
                         </div>
 
                         <div className="glass-card p-6">
-                            <h2 className="text-base font-bold text-white mb-4">Booking History</h2>
+                            <h2 className="text-base font-bold text-theme mb-4">Booking History</h2>
                             {bookLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="w-8 h-8 rounded-full border-4 border-red-500 border-t-transparent animate-spin" />
@@ -234,7 +234,7 @@ const ProfilePage = () => {
                                                 🏫
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-white font-semibold text-sm truncate">{b.venue?.name || 'Venue'}</p>
+                                                <p className="text-theme font-semibold text-sm truncate">{b.venue?.name || 'Venue'}</p>
                                                 <p className="text-gray-500 text-xs">{new Date(b.date).toLocaleDateString()} · {b.startTime}–{b.endTime}</p>
                                             </div>
                                             <StatusBadge status={b.status} />
@@ -251,7 +251,7 @@ const ProfilePage = () => {
                     <div className="space-y-4 animate-fade-in-up">
                         {/* Security overview */}
                         <div className="glass-card p-6">
-                            <h2 className="text-base font-bold text-white mb-4">🔒 Security Overview</h2>
+                            <h2 className="text-base font-bold text-theme mb-4">🔒 Security Overview</h2>
                             <div className="space-y-3">
                                 {[
                                     ['Password', 'Last changed: Set on account creation', '🔑', '#4ade80'],
@@ -262,7 +262,7 @@ const ProfilePage = () => {
                                         style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                                         <span className="text-xl">{ico}</span>
                                         <div className="flex-1">
-                                            <p className="text-white text-sm font-medium">{k}</p>
+                                            <p className="text-theme text-sm font-medium">{k}</p>
                                             <p className="text-gray-500 text-xs">{v}</p>
                                         </div>
                                         <span className="text-xs px-2 py-0.5 rounded-full font-medium"
@@ -282,7 +282,7 @@ const ProfilePage = () => {
                                     🔐
                                 </div>
                                 <div>
-                                    <h2 className="text-base font-bold text-white">Change Password</h2>
+                                    <h2 className="text-base font-bold text-theme">Change Password</h2>
                                     <p className="text-gray-500 text-xs">Choose a strong password to protect your account</p>
                                 </div>
                             </div>

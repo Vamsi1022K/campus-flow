@@ -85,7 +85,7 @@ const BookVenue = () => {
                 <div className="glass-card p-5 mb-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-xl font-black text-white">{venue.name}</h1>
+                            <h1 className="text-xl font-black text-theme">{venue.name}</h1>
                             <p className="text-gray-400 text-sm mt-1">👥 Capacity: {venue.capacity}</p>
                         </div>
                         <span className={`text-xs px-3 py-1 rounded-full font-semibold ${venue.type === 'classroom' ? 'badge-classroom' : 'badge-seminar'}`}>
@@ -96,7 +96,7 @@ const BookVenue = () => {
 
                 {/* Booking Form */}
                 <div className="glass-card p-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                    <h2 className="text-lg font-bold text-white mb-5">📝 Booking Details</h2>
+                    <h2 className="text-lg font-bold text-theme mb-5">📝 Booking Details</h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-1.5">Date</label>
