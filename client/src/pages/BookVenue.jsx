@@ -17,6 +17,7 @@ const BookVenue = () => {
     const [purpose, setPurpose] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [canWaitlist, setCanWaitlist] = useState(false);
 
     useEffect(() => {
         api.get(`/venues`).then(r => {
@@ -25,19 +26,24 @@ const BookVenue = () => {
         });
     }, [id]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (e, isWaitlist = false) => {
+        if (e) e.preventDefault();
         if (startTime >= endTime) {
             return showToast('End time must be after start time.', 'error');
         }
         setLoading(true);
         try {
-            await api.post('/bookings', { venue: id, date, startTime, endTime, purpose });
+            await api.post('/bookings', { venue: id, date, startTime, endTime, purpose, isWaitlist });
             setSuccess(true);
-            showToast('Booking request submitted! ✓', 'success');
+            showToast(isWaitlist ? 'Added to waitlist! ✓' : 'Booking request submitted! ✓', 'success');
             setTimeout(() => navigate('/dashboard'), 1800);
         } catch (err) {
-            showToast(err.response?.data?.message || 'Booking failed. Please try again.', 'error');
+            if (err.response?.status === 409 && err.response?.data?.canWaitlist) {
+                setCanWaitlist(true);
+                showToast(err.response.data.message, 'info');
+            } else {
+                showToast(err.response?.data?.message || 'Booking failed. Please try again.', 'error');
+            }
         } finally {
             setLoading(false);
         }
@@ -123,10 +129,23 @@ const BookVenue = () => {
                                 placeholder="e.g. CS101 extra class, Department seminar..." required />
                         </div>
 
-                        <button type="submit" disabled={loading || success}
-                            className="btn-primary w-full">
-                            {success ? '✓ Submitted! Redirecting...' : loading ? '⏳ Submitting...' : '🚀 Submit Booking Request'}
-                        </button>
+                        {canWaitlist ? (
+                            <div className="flex gap-3 mt-2">
+                                <button type="button" onClick={() => handleSubmit(null, true)} disabled={loading || success}
+                                    className="btn-primary flex-1" style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}>
+                                    {loading ? '⏳ Processing...' : '⏳ Join Waitlist'}
+                                </button>
+                                <button type="button" onClick={() => setCanWaitlist(false)} disabled={loading || success}
+                                    className="btn-glass flex-1 rounded-lg font-medium text-sm">
+                                    Cancel
+                                </button>
+                            </div>
+                        ) : (
+                            <button type="submit" disabled={loading || success}
+                                className="btn-primary w-full mt-2">
+                                {success ? '✓ Submitted! Redirecting...' : loading ? '⏳ Submitting...' : '🚀 Submit Booking Request'}
+                            </button>
+                        )}
                     </form>
                 </div>
             </main>

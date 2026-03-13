@@ -22,7 +22,7 @@ const LandingPage = () => {
             <nav className="navbar px-8 py-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-                        style={{ background: 'linear-gradient(135deg,#e02020,#7b0d0d)' }}>
+                        style={{ background: 'linear-gradient(135deg, #2563eb, #1d4ed8)' }}>
                         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                 d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -47,13 +47,13 @@ const LandingPage = () => {
             <section className="relative overflow-hidden px-6 pt-24 pb-32 text-center">
                 {/* Glowing orbs */}
                 <div className="absolute -top-20 left-1/3 w-[500px] h-[500px] rounded-full opacity-10 blur-3xl pointer-events-none"
-                    style={{ background: 'radial-gradient(circle,#e02020,transparent)' }} />
+                    style={{ background: 'radial-gradient(circle,#2563eb,transparent)' }} />
                 <div className="absolute top-10 right-1/4 w-80 h-80 rounded-full opacity-10 blur-3xl pointer-events-none"
                     style={{ background: 'radial-gradient(circle,#1a6ef5,transparent)' }} />
 
                 <div className="relative z-10 max-w-4xl mx-auto">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold mb-6"
-                        style={{ background: 'rgba(224,32,32,0.15)', color: '#f87171', border: '1px solid rgba(224,32,32,0.3)' }}>
+                        style={{ background: 'rgba(37,99,235,0.15)', color: '#60a5fa', border: '1px solid rgba(37,99,235,0.3)' }}>
                         🎓 Built for Campus Use
                     </div>
                     <h1 className="text-5xl sm:text-7xl font-black text-theme leading-tight mb-6">
@@ -107,7 +107,7 @@ const LandingPage = () => {
 
             {/* ── How it works ── */}
             <section className="px-6 py-20 text-center"
-                style={{ background: 'linear-gradient(135deg,rgba(224,32,32,0.06),rgba(26,110,245,0.04))' }}>
+                style={{ background: 'linear-gradient(135deg,rgba(37,99,235,0.06),rgba(79,70,229,0.04))' }}>
                 <h2 className="text-4xl font-black text-theme mb-14">How It Works</h2>
                 <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
                     {[

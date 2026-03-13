@@ -5,6 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import api from '../api/axios';
 import Toast, { useToast } from '../components/Toast';
 import CalendarView from '../components/CalendarView';
+import AnalyticsChart from '../components/AnalyticsChart';
 
 /* ── Status badge ── */
 const StatusBadge = ({ status }) => {
@@ -13,6 +14,7 @@ const StatusBadge = ({ status }) => {
         approved: 'badge-approved',
         rejected: 'badge-rejected',
         cancelled: 'badge-rejected',
+        waitlisted: 'badge-waitlist',
     };
     return (
         <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${map[status] || 'badge-pending'}`}>
@@ -116,6 +118,27 @@ const Dashboard = () => {
         }
     };
 
+    const exportCSV = (dataToExport, filename) => {
+        const headers = ['User', 'Venue', 'Date', 'Start Time', 'End Time', 'Status', 'Purpose'];
+        const rows = dataToExport.map(b => [
+            b.user?.username || b.user || 'Unknown',
+            b.venue?.name || b.venue || 'Unknown',
+            new Date(b.date).toLocaleDateString(),
+            b.start_time || b.startTime,
+            b.end_time || b.endTime,
+            b.status,
+            `"${(b.purpose || '').replace(/"/g, '""')}"`
+        ]);
+        const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const unreadCount = notifications.filter(n => !n.isRead).length;
 
     // Filtered venues
@@ -134,9 +157,9 @@ const Dashboard = () => {
 
     if (busy) return (
         <div className="bg-app flex h-screen items-center justify-center">
-            <div className="text-center">
-                <div className="w-12 h-12 rounded-full border-4 border-red-500 border-t-transparent animate-spin mx-auto mb-4" />
-                <p className="text-gray-400">Loading dashboard...</p>
+            <div className="text-center animate-fade-in-up">
+                <div className="w-10 h-10 rounded-full border-4 border-blue-500 border-t-transparent animate-spin mx-auto mb-4" />
+                <p className="text-slate-400 font-medium tracking-wide text-sm uppercase">Loading Dashboard</p>
             </div>
         </div>
     );
@@ -230,13 +253,12 @@ const Dashboard = () => {
             <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
                 {/* ── Hero Banner ── */}
-                <div className="rounded-2xl p-6 mb-8 animate-fade-in-up"
-                    style={{ background: 'linear-gradient(135deg, #e02020 0%, #7b0d0d 50%, #1a1a2e 100%)' }}>
-                    <h1 className="text-2xl font-black text-white">
-                        Good day, {user?.username}! 👋
+                <div className="rounded-2xl p-6 mb-8 animate-fade-in-up hero-gradient shadow-xl border border-white/5">
+                    <h1 className="text-2xl font-bold text-white tracking-tight">
+                        Welcome, {user?.username}.
                     </h1>
-                    <p className="text-red-200 mt-1 text-sm">
-                        {isUser ? 'Select a venue below to request a booking.' : 'Manage bookings and venue requests.'}
+                    <p className="text-slate-300 mt-1.5 text-sm font-medium">
+                        {isUser ? 'Overview of your venue requests and system status.' : 'Management overview of venue requests and system status.'}
                     </p>
                 </div>
 
@@ -256,6 +278,9 @@ const Dashboard = () => {
                                 </div>
                             ))}
                         </div>
+
+                        {/* Analytics Charts */}
+                        <AnalyticsChart bookings={bookings} />
 
                         {/* Pending approvals */}
                         <div className="glass-card p-6 mb-8">
@@ -305,7 +330,13 @@ const Dashboard = () => {
 
                         {/* All bookings history */}
                         <div className="glass-card p-6">
-                            <h2 className="text-lg font-bold text-white mb-4">📋 All Booking History</h2>
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-lg font-bold text-white">📋 All Booking History</h2>
+                                <button onClick={() => exportCSV(bookings, 'all_bookings.csv')}
+                                    className="btn-glass text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1">
+                                    📥 Export CSV
+                                </button>
+                            </div>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm table-dark">
                                     <thead>
@@ -395,8 +426,8 @@ const Dashboard = () => {
                                                 <div className="w-full h-32 rounded-xl mb-3 flex items-center justify-center text-4xl"
                                                     style={{
                                                         background: v.type === 'classroom'
-                                                            ? 'linear-gradient(135deg, rgba(26,110,245,0.3), rgba(13,13,13,0.8))'
-                                                            : 'linear-gradient(135deg, rgba(224,32,32,0.3), rgba(13,13,13,0.8))'
+                                                            ? 'linear-gradient(135deg, rgba(37,99,235,0.2), rgba(15,23,42,0.8))'
+                                                            : 'linear-gradient(135deg, rgba(79,70,229,0.2), rgba(15,23,42,0.8))'
                                                     }}>
                                                     {v.type === 'classroom' ? '📚' : '🎤'}
                                                 </div>
@@ -424,7 +455,13 @@ const Dashboard = () => {
 
                                 {/* My Booking Requests */}
                                 <div className="glass-card p-6">
-                                    <h2 className="text-lg font-bold text-white mb-4">📋 My Booking Requests</h2>
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h2 className="text-lg font-bold text-white">📋 My Booking Requests</h2>
+                                        <button onClick={() => exportCSV(myBookings, 'my_bookings.csv')}
+                                            className="btn-glass text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1">
+                                            📥 Export CSV
+                                        </button>
+                                    </div>
                                     <div className="overflow-x-auto">
                                         <table className="w-full text-sm table-dark">
                                             <thead>

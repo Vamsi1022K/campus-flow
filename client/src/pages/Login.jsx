@@ -92,15 +92,6 @@ const Login = () => {
                         </button>
                     </form>
 
-                    <div className="mt-6 pt-5" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                        <p className="text-xs font-medium mb-3" style={{ color: '#6b7280' }}>Demo Accounts (password: password123)</p>
-                        <div className="grid grid-cols-2 gap-2 text-xs" style={{ color: '#9ca3af' }}>
-                            <span>🎓 faculty_john — Faculty</span>
-                            <span>📋 cr_mary — Class Rep</span>
-                            <span>🛠️ admin_classroom — Admin</span>
-                            <span>👑 admin_sys — Sys Admin</span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

@@ -9,17 +9,23 @@ router.post('/chat', auth, async (req, res) => {
     try {
         const { messages, apiKey } = req.body;
 
-        // Use key from frontend or fallback to .env
-        const geminiKey = apiKey || process.env.GEMINI_API_KEY;
+        // Priority: 
+        // 1. Server-side .env key (Preferred for "Login" experience)
+        // 2. Client-provided key (Fallback/Override)
+        const geminiKey = process.env.GEMINI_API_KEY || apiKey;
 
-        if (!geminiKey) {
+        if (!geminiKey || geminiKey === 'your_gemini_api_key_here') {
             return res.status(401).json({
-                error: 'No API key',
-                message: 'Please provide a Gemini API Key to use Campus AI.'
+                error: 'No API key configured',
+                message: 'Campus AI is not configured. Please contact the administrator or provide a Gemini API Key.'
             });
         }
 
-        const ai = new GoogleGenAI({ apiKey: geminiKey });
+        const ai = new GoogleGenAI(geminiKey);
+        const model = ai.getGenerativeModel({
+            model: "gemini-1.5-flash",
+            systemInstruction: "" // We will pass this in the content/prompt or use the newer syntax
+        });
 
         // Fetch DB Context
         const [venues, bookings] = await Promise.all([
@@ -31,48 +37,43 @@ router.post('/chat', auth, async (req, res) => {
         ]);
 
         // Construct System Prompt
-        const systemInstruction = `You are "Campus AI", the intelligent booking assistant for Campus Flow.
+        const systemContext = `You are "Campus AI", the intelligent booking assistant for Campus Flow.
         
 Your role is to help users find available venues, answer questions about bookings, and guide them. Keep your answers concise, friendly, and formatted neatly with emojis where appropriate.
 
-CURRENT CONTEXT OF THE SYSTEM:
-- Today's date is: ${new Date().toLocaleDateString()}
-- User asking: username "${req.user.username}", role: "${req.user.role}"
+CURRENT CONTEXT:
+- Today: ${new Date().toLocaleDateString()}
+- User: ${req.user.username} (${req.user.role})
 
-ALL VENUES IN SYSTEM:
+VENUES:
 ${venues.map(v => `- ${v.name} (${v.type}, capacity: ${v.capacity})`).join('\n')}
 
-CURRENT APPROVED BOOKINGS (These times are UNAVAILABLE):
-${bookings.map(b => `- ${b.venue?.name} on ${new Date(b.date).toLocaleDateString()} from ${b.startTime} to ${b.endTime} for ${b.purpose}`).join('\n')}
+APPROVED BOOKINGS (Occupied):
+${bookings.map(b => `- ${b.venue?.name}: ${new Date(b.date).toLocaleDateString()} ${b.startTime}-${b.endTime} (${b.purpose})`).join('\n')}
 
-If a user asks to book a room, advise them that you cannot book it directly for them yet, but you can check if it's free and direct them to the booking page.
-If they ask for a recommendation, consider the capacity needed and the purpose.
+If asked to book, guide them to the booking page. Do not perform bookings yourself.
 `;
 
-        // Wait, @google/genai usage is:
-        // const response = await ai.models.generateContent({
-        //    model: 'gemini-2.5-flash',
-        //    contents: '...',
-        //    config: { systemInstruction: '...' }
-        // });
-
-        // For conversation history, we pass an array of content parts
-        // format: [{ role: 'user', parts: [{text: '...'}] }, { role: 'model', parts: [{text: '...'}] }]
-        const formattedHistory = messages.map(msg => ({
-            role: msg.role === 'ai' ? 'model' : 'user',
-            parts: [{ text: msg.text }]
-        }));
-
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: formattedHistory,
-            config: {
-                systemInstruction: systemInstruction,
-                temperature: 0.3,
-            }
+        // Format history for Gemini SDK
+        const chat = model.startChat({
+            history: messages.slice(0, -1).map(msg => ({
+                role: msg.role === 'ai' ? 'model' : 'user',
+                parts: [{ text: msg.text }]
+            })),
+            generationConfig: {
+                maxOutputTokens: 500,
+            },
         });
 
-        res.json({ reply: response.text });
+        // Add system context to the final message or as a preamble
+        const lastMsg = messages[messages.length - 1].text;
+        const fullPrompt = `System Context: ${systemContext}\n\nUser Question: ${lastMsg}`;
+
+        const result = await chat.sendMessage(fullPrompt);
+        const response = await result.response;
+        const text = response.text();
+
+        res.json({ reply: text });
 
     } catch (err) {
         console.error('AI Chat Error:', err);

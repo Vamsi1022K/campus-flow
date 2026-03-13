@@ -38,7 +38,23 @@ exports.createBooking = async (req, res) => {
         });
 
         if (overlappingBookings.length > 0) {
-            return res.status(409).json({ message: 'Venue is already booked or pending for this time slot' });
+            if (req.body.isWaitlist) {
+                const waitlistedBooking = new Booking({
+                    user_id: req.user.id,
+                    venue_id,
+                    date,
+                    start_time,
+                    end_time,
+                    purpose,
+                    status: 'waitlisted'
+                });
+                await waitlistedBooking.save();
+                return res.status(201).json(waitlistedBooking);
+            }
+            return res.status(409).json({
+                message: 'Venue is already booked or pending for this time slot. Would you like to join the waitlist?',
+                canWaitlist: true
+            });
         }
 
         // 4. Create Booking
