@@ -31,6 +31,16 @@ router.put('/change-password', auth, async (req, res) => {
     }
 });
 
+// GET /api/users/faculty  – get all faculty users (any authenticated user can call this)
+router.get('/faculty', auth, async (req, res) => {
+    try {
+        const faculty = await User.find({ role: 'faculty' }).select('_id username role');
+        res.json(faculty);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // GET /api/users/me  – get current user stats
 router.get('/me', auth, async (req, res) => {
     try {

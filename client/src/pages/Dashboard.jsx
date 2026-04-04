@@ -100,7 +100,7 @@ const Dashboard = () => {
                 ];
                 // CR: also load faculty list + their change requests
                 if (user?.role === 'cr') {
-                    promises.push(api.get('/admin/users'));
+                    promises.push(api.get('/users/faculty'));
                     promises.push(api.get('/timetable/change-requests/mine'));
                 }
                 // Faculty: load incoming change requests
@@ -116,7 +116,7 @@ const Dashboard = () => {
                 setMyTimetable(results[4].data);
 
                 if (user?.role === 'cr') {
-                    setAllFaculty(results[5].data.filter(u => u.role === 'faculty'));
+                    setAllFaculty(results[5].data);
                     setMyChangeRequests(results[6].data);
                 }
                 if (user?.role === 'faculty') {

@@ -19,8 +19,23 @@ const authLimiter = rateLimit({
 });
 
 // Middleware
-app.use(cors());
+const allowedOrigins = process.env.ALLOWED_ORIGIN
+    ? process.env.ALLOWED_ORIGIN.split(',')
+    : ['http://localhost:5173', 'http://localhost:4173'];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        // Allow requests with no origin (mobile apps, curl, Render health checks)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true
+}));
 app.use(express.json());
+
+// Apply rate limit to login BEFORE route registration
+app.use('/api/auth/login', authLimiter);
 
 // Main Route
 app.get('/', (req, res) => {
@@ -48,8 +63,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/timetable', timetableRoutes);
 app.use('/api/feedback', feedbackRoutes);
 
-// Apply rate limit specifically to login
-app.use('/api/auth/login', authLimiter);
+// NOTE: rate limit is applied above before routes
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
