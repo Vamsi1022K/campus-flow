@@ -9,42 +9,39 @@ const Notification = require('../models/Notification');
 // @route   POST /api/bookings
 // @access  Private (Faculty, CR, Event Organizer)
 exports.createBooking = async (req, res) => {
-    // ... [createBooking omitted for brevity] ...
-    // I need to properly include it, let me just add the function at the bottom instead of replacing.
     try {
-        const { venue_id, date, start_time, end_time, purpose } = req.body;
+        // Frontend sends: venue, date, startTime, endTime, purpose, isWaitlist
+        const { venue, date, startTime, endTime, purpose, isWaitlist } = req.body;
 
         // 1. Basic Validation
-        if (!venue_id || !date || !start_time || !end_time || !purpose) {
-            return res.status(400).json({ message: 'Please provide all required fields' });
+        if (!venue || !date || !startTime || !endTime || !purpose) {
+            return res.status(400).json({ message: 'Please provide all required fields (venue, date, startTime, endTime, purpose)' });
         }
 
         // 2. Check if Venue exists
-        const venue = await Venue.findById(venue_id);
-        if (!venue) {
+        const venueDoc = await Venue.findById(venue);
+        if (!venueDoc) {
             return res.status(404).json({ message: 'Venue not found' });
         }
 
-        // 3. Prevent Double Booking
-        // Find any overlapping bookings for the same venue and date that are either approved or pending
+        // 3. Prevent Double Booking – find overlapping approved/pending bookings
         const overlappingBookings = await Booking.find({
-            venue_id,
+            venue_id: venue,
             date: new Date(date),
             status: { $in: ['approved', 'pending'] },
             $or: [
-                // New booking starts during an existing booking
-                { start_time: { $lt: end_time }, end_time: { $gt: start_time } }
+                { start_time: { $lt: endTime }, end_time: { $gt: startTime } }
             ]
         });
 
         if (overlappingBookings.length > 0) {
-            if (req.body.isWaitlist) {
+            if (isWaitlist) {
                 const waitlistedBooking = new Booking({
                     user_id: req.user.id,
-                    venue_id,
+                    venue_id: venue,
                     date,
-                    start_time,
-                    end_time,
+                    start_time: startTime,
+                    end_time: endTime,
                     purpose,
                     status: 'waitlisted'
                 });
@@ -60,12 +57,12 @@ exports.createBooking = async (req, res) => {
         // 4. Create Booking
         const newBooking = new Booking({
             user_id: req.user.id,
-            venue_id,
+            venue_id: venue,
             date,
-            start_time,
-            end_time,
+            start_time: startTime,
+            end_time: endTime,
             purpose,
-            status: 'pending' // Always starts as pending
+            status: 'pending'
         });
 
         await newBooking.save();

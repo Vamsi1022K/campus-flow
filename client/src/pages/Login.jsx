@@ -8,6 +8,7 @@ const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(true);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -74,9 +75,25 @@ const Login = () => {
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
-                            <input id="password" type="password" value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                className="input-dark" placeholder="Enter your password" required />
+                            <div className="relative">
+                                <input id="password" type={showPassword ? "text" : "password"} value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    className="input-dark w-full pr-10" placeholder="Enter your password" required />
+                                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
+                                    aria-label={showPassword ? "Hide password" : "Show password"}>
+                                    {showPassword ? (
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 011.5-2.825m2.77-2.77A10.035 10.035 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.05 10.05 0 01-1.5 2.825m-2.77 2.77A10.035 10.035 0 0112 19M15 12a3 3 0 01-2.94 3.01m-3.03-.06A3 3 0 019.03 12.03M3 3l18 18" />
+                                        </svg>
+                                    ) : (
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    )}
+                                </button>
+                            </div>
                         </div>
                         <div className="flex items-center gap-2">
                             <input id="remember-me" type="checkbox" checked={rememberMe}

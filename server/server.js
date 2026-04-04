@@ -35,6 +35,8 @@ const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/users');
 const aiRoutes = require('./routes/ai');
 const notificationRoutes = require('./routes/notifications');
+const timetableRoutes = require('./routes/timetable');
+const feedbackRoutes = require('./routes/feedback');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/venues', venueRoutes);
@@ -43,6 +45,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/timetable', timetableRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // Apply rate limit specifically to login
 app.use('/api/auth/login', authLimiter);

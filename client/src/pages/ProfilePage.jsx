@@ -190,10 +190,10 @@ const ProfilePage = () => {
                                     <p className="text-gray-500 text-sm">Toggle between dark and light theme</p>
                                 </div>
                                 <button onClick={toggle}
-                                    className="relative w-12 h-6 rounded-full transition-colors duration-200 flex-shrink-0"
-                                    style={{ background: isDark ? '#e02020' : '#374151' }}>
-                                    <span className="absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"
-                                        style={{ transform: isDark ? 'translateX(26px)' : 'translateX(2px)' }} />
+                                    className="relative w-[50px] h-[26px] rounded-full transition-colors duration-300 flex-shrink-0 flex items-center px-1 cursor-pointer"
+                                    style={{ background: isDark ? '#e02020' : '#4b5563' }}>
+                                    <span className="w-5 h-5 bg-white rounded-full shadow-md transition-all duration-300 transform"
+                                        style={{ transform: isDark ? 'translateX(24px)' : 'translateX(0px)' }} />
                                 </button>
                             </div>
                         </div>
@@ -287,52 +287,16 @@ const ProfilePage = () => {
                                 </div>
                             </div>
 
-                            <form onSubmit={handleChangePassword} className="space-y-4">
-                                <PasswordInput label="Current Password" val={currentPassword} setVal={setCurrentPassword}
-                                    show={showCurrent} setShow={setShowCurrent} placeholder="Enter your current password" />
-                                <PasswordInput label="New Password" val={newPassword} setVal={setNewPassword}
-                                    show={showNew} setShow={setShowNew} placeholder="Min 8 chars, uppercase + number recommended" />
-
-                                {/* Password strength bar */}
-                                {newPassword && strength && (
-                                    <div>
-                                        <div className="flex justify-between text-xs mb-1">
-                                            <span className="text-gray-500">Password strength</span>
-                                            <span style={{ color: strength.color }}>{strength.label}</span>
-                                        </div>
-                                        <div className="h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.1)' }}>
-                                            <div className="h-full rounded-full transition-all duration-300"
-                                                style={{ width: strength.width, background: strength.color }} />
-                                        </div>
-                                        <ul className="mt-2 text-xs text-gray-500 space-y-0.5">
-                                            <li style={{ color: newPassword.length >= 8 ? '#4ade80' : '#6b7280' }}>
-                                                {newPassword.length >= 8 ? '✓' : '○'} At least 8 characters
-                                            </li>
-                                            <li style={{ color: /[A-Z]/.test(newPassword) ? '#4ade80' : '#6b7280' }}>
-                                                {/[A-Z]/.test(newPassword) ? '✓' : '○'} Uppercase letter
-                                            </li>
-                                            <li style={{ color: /[0-9]/.test(newPassword) ? '#4ade80' : '#6b7280' }}>
-                                                {/[0-9]/.test(newPassword) ? '✓' : '○'} Number
-                                            </li>
-                                        </ul>
-                                    </div>
-                                )}
-
-                                <PasswordInput label="Confirm New Password" val={confirmPassword} setVal={setConfirmPassword}
-                                    show={showConfirm} setShow={setShowConfirm} placeholder="Repeat your new password" />
-
-                                {/* Match indicator */}
-                                {confirmPassword && (
-                                    <p className="text-xs" style={{ color: newPassword === confirmPassword ? '#4ade80' : '#f87171' }}>
-                                        {newPassword === confirmPassword ? '✓ Passwords match' : '✗ Passwords do not match'}
-                                    </p>
-                                )}
-
-                                <button type="submit" disabled={pwLoading}
-                                    className="btn-primary w-full mt-2">
-                                    {pwLoading ? '⏳ Updating...' : '🔐 Update Password'}
-                                </button>
-                            </form>
+                            <button onClick={() => navigate('/change-password')} 
+                                className="w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all"
+                                style={{ background: 'linear-gradient(135deg, rgba(224,32,32,0.1), rgba(224,32,32,0.2))', color: '#f87171', border: '1px solid rgba(224,32,32,0.3)' }}
+                                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(224,32,32,0.25)'}
+                                onMouseOut={(e) => e.currentTarget.style.background = 'linear-gradient(135deg, rgba(224,32,32,0.1), rgba(224,32,32,0.2))'}>
+                                <span>Go to Password Settings</span>
+                                <svg className="w-4 h-4 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 )}

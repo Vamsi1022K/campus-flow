@@ -22,6 +22,25 @@ router.get('/users', auth, sysadminOnly, async (req, res) => {
     }
 });
 
+// POST /api/admin/users - add a new user (sysadmin only)
+const bcrypt = require('bcryptjs');
+router.post('/users', auth, sysadminOnly, async (req, res) => {
+    try {
+        const { username, password, role } = req.body;
+        let user = await User.findOne({ username });
+        if (user) return res.status(400).json({ message: 'User already exists' });
+        
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        
+        user = new User({ username, password: hashedPassword, role });
+        await user.save();
+        res.status(201).json({ _id: user._id, username: user.username, role: user.role });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // DELETE /api/admin/users/:id  – remove a user
 router.delete('/users/:id', auth, sysadminOnly, async (req, res) => {
     try {

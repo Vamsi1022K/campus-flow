@@ -295,6 +295,11 @@ select.input-dark option {
   color: white;
 }
 
+.light-mode select.input-dark option {
+  background-color: white;
+  color: black;
+}
+
 /* ── Section tables ── */
 .table-dark thead {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -305,6 +310,15 @@ select.input-dark option {
 
 .table-dark tr:hover td {
   background: rgba(255, 255, 255, 0.03);
+}
+
+.light-mode .table-dark thead {
+  border-bottom-color: #e2e8f0;
+  color: #475569;
+}
+
+.light-mode .table-dark tr:hover td {
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .table-dark td,

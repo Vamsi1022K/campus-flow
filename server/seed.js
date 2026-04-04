@@ -21,7 +21,7 @@ const seedDB = async () => {
         const hashedPassword = await bcrypt.hash('password123', salt);
 
         const users = await User.insertMany([
-            { username: 'admin_sys', password: hashedPassword, role: 'sysadmin' },
+            { username: 'sysadmin', password: hashedPassword, role: 'sysadmin' },
             { username: 'admin_classroom', password: hashedPassword, role: 'classroom_admin' },
             { username: 'faculty_john', password: hashedPassword, role: 'faculty' },
             { username: 'cr_mary', password: hashedPassword, role: 'cr' }

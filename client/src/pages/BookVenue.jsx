@@ -19,11 +19,21 @@ const BookVenue = () => {
     const [success, setSuccess] = useState(false);
     const [canWaitlist, setCanWaitlist] = useState(false);
 
+    const [timetable, setTimetable] = useState([]);
+
     useEffect(() => {
-        api.get(`/venues`).then(r => {
-            const v = r.data.find(v => v._id === id);
-            setVenue(v || null);
-        });
+        const load = async () => {
+            try {
+                const [r, t] = await Promise.all([
+                    api.get(`/venues`),
+                    api.get(`/timetable/venue/${id}`)
+                ]);
+                const v = r.data.find(v => v._id === id);
+                setVenue(v || null);
+                setTimetable(t.data);
+            } catch (err) {}
+        };
+        load();
     }, [id]);
 
     const handleSubmit = async (e, isWaitlist = false) => {
@@ -99,6 +109,30 @@ const BookVenue = () => {
                         </span>
                     </div>
                 </div>
+
+                {/* Regular Timetable Info */}
+                {timetable.length > 0 && (
+                    <div className="glass-card p-5 mb-6 animate-fade-in-up" style={{ animationDelay: '0.15s', border: '1px solid rgba(59,130,246,0.3)' }}>
+                        <h2 className="text-sm font-bold text-white mb-3">📅 Regular Schedule for {venue.name}</h2>
+                        <ul className="space-y-2">
+                            {timetable.map(t => (
+                                <li key={t._id} className="flex items-center justify-between bg-white/5 px-3 py-2.5 rounded-lg">
+                                    <div>
+                                        <span className="text-blue-400 font-semibold text-xs">{t.dayOfWeek}</span>
+                                        <span className="text-gray-300 text-xs ml-2">·</span>
+                                        <span className="text-white text-xs font-medium ml-2">{t.courseCode}</span>
+                                        {t.faculty_id?.username && (
+                                            <span className="text-gray-500 text-xs ml-2">({t.faculty_id.username})</span>
+                                        )}
+                                    </div>
+                                    <span className="text-gray-300 text-xs font-mono whitespace-nowrap ml-4">
+                                        {t.startTime} – {t.endTime}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
 
                 {/* Booking Form */}
                 <div className="glass-card p-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>

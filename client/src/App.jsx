@@ -9,7 +9,7 @@ import BookVenue from './pages/BookVenue';
 import AdminPanel from './pages/AdminPanel';
 import ProfilePage from './pages/ProfilePage';
 import LandingPage from './pages/LandingPage';
-import AIAssistant from './components/AIAssistant';
+import ChangePassword from './pages/ChangePassword';
 import Toast from './components/Toast';
 
 // ProtectedRoute: blocks access to pages that require login
@@ -58,6 +58,7 @@ const AnimatedRoutes = () => {
         <Route path="/book/:id" element={<ProtectedRoute allowedRoles={['faculty', 'cr', 'event_organizer']}><AnimatedPage><BookVenue /></AnimatedPage></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute allowedRoles={['sysadmin']}><AnimatedPage><AdminPanel /></AnimatedPage></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><AnimatedPage><ProfilePage /></AnimatedPage></ProtectedRoute>} />
+        <Route path="/change-password" element={<ProtectedRoute><AnimatedPage><ChangePassword /></AnimatedPage></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </AnimatePresence>
@@ -70,7 +71,6 @@ function App() {
       <AuthProvider>
         <Router>
           <AnimatedRoutes />
-          <AIAssistant />
           <Toast /> {/* Render react-hot-toast Toaster globally */}
         </Router>
       </AuthProvider>
